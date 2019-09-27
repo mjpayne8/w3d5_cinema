@@ -1,6 +1,7 @@
 require('pg')
 require_relative('../db/sql_runner')
 require_relative('./film')
+require_relative('./ticket')
 
 class Customer
 
@@ -44,6 +45,12 @@ class Customer
     WHERE customer_id = $1"
     values = [@id]
     return SqlRunner.run(sql, values).map {|film| Film.new(film)}
+  end
+
+  def buy_ticket(film)
+    ticket = Ticket.new({'film_id' => film.id, 'customer_id' => @id})
+    ticket.save()
+    @funds -= film.price()
   end
 
   def self.all()
