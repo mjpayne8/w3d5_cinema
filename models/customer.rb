@@ -48,9 +48,11 @@ class Customer
   end
 
   def buy_ticket(film)
-    ticket = Ticket.new({'film_id' => film.id, 'customer_id' => @id})
-    ticket.save()
-    @funds -= film.price()
+    if film.price <= @funds
+      ticket = Ticket.new({'film_id' => film.id, 'customer_id' => @id})
+      ticket.save()
+      @funds -= film.price()
+    end
   end
 
   def film_count()
