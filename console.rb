@@ -36,7 +36,9 @@ ticket1.delete()
 customer1.delete()
 film1.delete()
 
-customer2.films()
+p customer2.films()
+p film2.customers()
+
 
 binding.pry
 nil
