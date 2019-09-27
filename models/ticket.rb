@@ -14,9 +14,9 @@ def Ticket
   def save()
     sql = 'INSERT INTO tickets
       (customer_id, film_id)
-      VALUES ($1, $2)'
+      VALUES ($1, $2) RETURNING id'
     values = [@customer_id, @film_id]
-    SqlRunner.run(sql,values)
+    @id  = SqlRunner.run(sql,values)[0]['id']
   end
 
 end

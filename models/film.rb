@@ -14,9 +14,9 @@ class Film
   def save()
     sql = 'INSERT INTO films
       (title, price)
-      VALUES ($1, $2)'
+      VALUES ($1, $2) RETURNING id'
     values = [@title, @price]
-    SqlRunner.run(sql,values)
+    @id  = SqlRunner.run(sql,values)[0]['id']
   end
 
 end
