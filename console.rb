@@ -48,6 +48,9 @@ customer2.buy_ticket(film3)
 p Ticket.all
 p customer2
 
+p customer2.film_count()
+p film3.customer_count()
+
 
 
 binding.pry

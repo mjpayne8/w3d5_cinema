@@ -53,6 +53,10 @@ class Customer
     @funds -= film.price()
   end
 
+  def film_count()
+    return films().length()
+  end
+
   def self.all()
     sql = "SELECT * from customers"
     return SqlRunner.run(sql).map {|customer| Customer.new(customer)}
