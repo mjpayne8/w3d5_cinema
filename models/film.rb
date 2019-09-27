@@ -13,11 +13,16 @@ class Film
   end
 
   def save()
-    sql = 'INSERT INTO films
+    sql = "INSERT INTO films
       (title, price)
-      VALUES ($1, $2) RETURNING id'
+      VALUES ($1, $2) RETURNING id"
     values = [@title, @price]
     @id  = SqlRunner.run(sql,values)[0]['id']
+  end
+
+  def self.all()
+    sql = "SELECT * from films"
+    return SqlRunner.run(sql).map {|film| Film.new(film)}
   end
 
 end

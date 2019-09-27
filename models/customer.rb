@@ -13,11 +13,16 @@ class Customer
   end
 
   def save()
-    sql = 'INSERT INTO customers
+    sql = "INSERT INTO customers
       (name, funds)
-      VALUES ($1, $2) RETURNING id'
+      VALUES ($1, $2) RETURNING id"
     values = [@name, @funds]
     @id  = SqlRunner.run(sql,values)[0]['id']
+  end
+
+  def self.all()
+    sql = "SELECT * from customers"
+    return SqlRunner.run(sql).map {|customer| Customer.new(customer)}
   end
 
 end
