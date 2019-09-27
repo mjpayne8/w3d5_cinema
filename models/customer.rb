@@ -32,7 +32,7 @@ class Customer
     sql = "DELETE FROM customers
     WHERE id = $1"
     values = [@id]
-    SqlRunner(sql, values)
+    SqlRunner.run(sql, values)
   end
 
   def self.all()
