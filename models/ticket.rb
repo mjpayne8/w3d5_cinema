@@ -1,6 +1,7 @@
 require('pg')
+require_relative('../db/sql_runner')
 
-def Ticket
+class Ticket
 
   attr_accessor(:customer_id, :film_id)
   attr_reader(:id)
