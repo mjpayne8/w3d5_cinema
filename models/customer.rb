@@ -38,18 +38,20 @@ class Customer
   end
 
   def films()
-    sql = "SELECT films.*
+    sql = "SELECT DISTINCT films.*
     FROM films
-    INNER JOIN tickets
-    ON films.id = tickets.film_id
-    WHERE customer_id = $1"
+    INNER JOIN screenings
+    ON films.id = screenings.film_id
+    INNER JOIN ticket
+    on tickets.screening_id = screenings.id
+    WHERE tickets.customer_id = $1"
     values = [@id]
     return SqlRunner.run(sql, values).map {|film| Film.new(film)}
   end
 
-  def buy_ticket(film)
-    if film.price <= @funds
-      ticket = Ticket.new({'film_id' => film.id, 'customer_id' => @id})
+  def buy_ticket(film, screening)
+    if film.price <= @funds && screening.film_id == film.id
+      ticket = Ticket.new({'screening_id' => screening.id, 'customer_id' => @id})
       ticket.save()
       @funds -= film.price()
     end

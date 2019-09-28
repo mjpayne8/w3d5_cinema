@@ -15,16 +15,15 @@ CREATE TABLE films (
   price INT
 );
 
-CREATE TABLE tickets (
-  id SERIAL8 PRIMARY KEY,
-  customer_id INT8 REFERENCES customers(id),
-  film_id INT8 REFERENCES films(id)
-);
-
 CREATE TABLE screenings (
   id SERIAL8 PRIMARY KEY,
   screening_time VARCHAR(255),
-  tickets_sold INT,
   max_capacity INT,
   film_id INT8 REFERENCES films(id)
+);
+
+CREATE TABLE tickets (
+  id SERIAL8 PRIMARY KEY,
+  customer_id INT8 REFERENCES customers(id),
+  screening_id INT8 REFERENCES screenings(id)
 );
