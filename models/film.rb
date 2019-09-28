@@ -52,6 +52,18 @@ class Film
     return customers().length()
   end
 
+  def popular_showing()
+    sql = "SELECT screenings.*
+    where screenings.film_id = $1"
+    values = [@id]
+    film_screenings = SqlRunner(sql, values).map {|screening| Screening.new(screening)}
+    count_hash = Hash.new(0)
+    for item in film_screenings
+      item[screening.screening_time] += item.count_tickets
+    end
+    return count_hash.max_by {|key, value| value}
+  end
+
   def self.all()
     sql = "SELECT * from films"
     return SqlRunner.run(sql).map {|film| Film.new(film)}
