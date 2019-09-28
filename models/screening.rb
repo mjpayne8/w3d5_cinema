@@ -17,14 +17,26 @@ attr_reader(:id)
     (screening_time, max_capacity, film_id)
     VALUES ($1, $2, $3) RETURNING id"
     values = [@screening_time, @max_capacity, @film_id]
-    @id  = SqlRunner.run(sql,values)[0]['id']
+    @id  = SqlRunner.run(sql,values)[0]['id'].to_i
   end
 
   def count_tickets()
     sql = "select tickets.*
+    FROM tickets
     where tickets.screening_id = $1"
     values = [@id]
-    return SqlRunner.run(sql, values).length()
+    results =  SqlRunner.run(sql, values).map {|ticket| Ticket.new(ticket)}
+    return results.length()
+  end
+
+  def self.all()
+    sql = "SELECT * from screenings"
+    return SqlRunner.run(sql).map {|screening| Screening.new(screening)}
+  end
+
+  def self.delete_all()
+    sql = "DELETE FROM screenings"
+    SqlRunner.run(sql)
   end
 
 end

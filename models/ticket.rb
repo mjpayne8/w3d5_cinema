@@ -1,5 +1,6 @@
 require('pg')
 require_relative('../db/sql_runner')
+require_relative('./screening')
 
 class Ticket
 
@@ -17,7 +18,7 @@ class Ticket
       (customer_id, screening_id)
       VALUES ($1, $2) RETURNING id"
     values = [@customer_id, @screening_id]
-    @id  = SqlRunner.run(sql,values)[0]['id']
+    @id  = SqlRunner.run(sql,values)[0]['id'].to_i
   end
 
   def update()

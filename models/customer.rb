@@ -2,6 +2,7 @@ require('pg')
 require_relative('../db/sql_runner')
 require_relative('./film')
 require_relative('./ticket')
+require_relative('./screening')
 
 class Customer
 
@@ -19,7 +20,7 @@ class Customer
     (name, funds)
     VALUES ($1, $2) RETURNING id"
     values = [@name, @funds]
-    @id  = SqlRunner.run(sql,values)[0]['id']
+    @id  = SqlRunner.run(sql,values)[0]['id'].to_i
   end
 
   def update()
@@ -42,7 +43,7 @@ class Customer
     FROM films
     INNER JOIN screenings
     ON films.id = screenings.film_id
-    INNER JOIN ticket
+    INNER JOIN tickets
     on tickets.screening_id = screenings.id
     WHERE tickets.customer_id = $1"
     values = [@id]

@@ -1,5 +1,6 @@
 require('pg')
 require_relative('./customer')
+require_relative('./screening')
 require_relative('../db/sql_runner')
 
 class Film
@@ -18,7 +19,7 @@ class Film
       (title, price)
       VALUES ($1, $2) RETURNING id"
     values = [@title, @price]
-    @id  = SqlRunner.run(sql,values)[0]['id']
+    @id  = SqlRunner.run(sql,values)[0]['id'].to_i
   end
 
   def update()
@@ -42,8 +43,8 @@ class Film
     INNER JOIN tickets
     ON customers.id = tickets.customer_id
     INNER JOIN screenings
-    WHERE screenings.id = tickets.screenings_id
-    WHERE screenins.film_id = $1"
+    ON screenings.id = tickets.screening_id
+    WHERE screenings.film_id = $1"
     values = [@id]
     return SqlRunner.run(sql, values).map {|customer| Customer.new(customer)}
   end
@@ -54,18 +55,19 @@ class Film
 
   def popular_showing()
     sql = "SELECT screenings.*
-    where screenings.film_id = $1"
+    FROM screenings
+    WHERE screenings.film_id = $1"
     values = [@id]
-    film_screenings = SqlRunner(sql, values).map {|screening| Screening.new(screening)}
+    film_screenings = SqlRunner.run(sql, values).map {|screening| Screening.new(screening)}
     count_hash = Hash.new(0)
     for item in film_screenings
-      item[screening.screening_time] += item.count_tickets
+      count_hash[item.screening_time] += item.count_tickets
     end
     return count_hash.max_by {|key, value| value}
   end
 
   def self.all()
-    sql = "SELECT * from films"
+    sql = "SELECT * FROM films"
     return SqlRunner.run(sql).map {|film| Film.new(film)}
   end
 
