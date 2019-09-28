@@ -41,7 +41,9 @@ class Film
     FROM customers
     INNER JOIN tickets
     ON customers.id = tickets.customer_id
-    WHERE film_id = $1"
+    INNER JOIN screenings
+    WHERE screenings.id = tickets.screenings_id
+    WHERE screenins.film_id = $1"
     values = [@id]
     return SqlRunner.run(sql, values).map {|customer| Customer.new(customer)}
   end
