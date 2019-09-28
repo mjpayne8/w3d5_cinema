@@ -50,7 +50,7 @@ class Customer
   end
 
   def buy_ticket(film, screening)
-    if film.price <= @funds && screening.film_id == film.id
+    if film.price <= @funds && screening.film_id == film.id && screening.count_tickets < screening.max_capacity
       ticket = Ticket.new({'screening_id' => screening.id, 'customer_id' => @id})
       ticket.save()
       @funds -= film.price()
